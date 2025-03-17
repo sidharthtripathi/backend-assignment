@@ -20,6 +20,7 @@ taskRouter.post("/", async (req, res) => {
 });
 
 taskRouter.get("/", async (req, res) => {
+    console.log(req.userId)
   const page = req.query.page as string;
   let priority = req.query.priority as Priority;
   let status = req.query.status as Status;

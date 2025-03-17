@@ -1,10 +1,13 @@
 {
   "name": "backend-project",
-  "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "build" :"npx tsc",
+    "start": "node build"
+  },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/bun": "latest",
+    "@types/node": "latest",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
