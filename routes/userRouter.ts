@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 export const userRouter = express.Router();
-userRouter.get("/login", async (req, res) => {
+userRouter.post("/login", async (req, res) => {
   try {
     const { username, password } = authSchema.parse(req.body);
     const user = await prisma.user.findUnique({
