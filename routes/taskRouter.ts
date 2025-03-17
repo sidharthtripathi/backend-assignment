@@ -3,6 +3,7 @@ import { taskSchema } from "../schema/taskSchema";
 import { prisma } from "../lib/prisma";
 import { Priority, Status } from "@prisma/client";
 import { redis } from "../lib/redis";
+import { ZodError } from "zod";
 export const taskRouter = express.Router();
 taskRouter.post("/", async (req, res) => {
   try {
@@ -12,22 +13,24 @@ taskRouter.post("/", async (req, res) => {
     });
     res.status(201).json(task);
   } catch (error) {
-    res.status(401).end();
+    if(error instanceof ZodError) res.status(400).end();
+    else res.status(500).end()
+    
   }
 });
 
 taskRouter.get("/", async (req, res) => {
-  const pageQuery = req.query.page as string;
-  const priority = req.query.priority as Priority;
-  const status = req.query.status as Status;
+  const page = req.query.page as string;
+  let priority = req.query.priority as Priority;
+  let status = req.query.status as Status;
 
   const take = 10;
-  const skip = Number(pageQuery) * take;
+  const skip = Number(page===undefined ? 0 : Number(page)) * take;
   const tasks = await prisma.task.findMany({
     where: {
       userId: req.userId,
-      priority: priority === undefined ? Priority.MEDIUM : priority,
-      status: status === undefined ? Status.COMPLETED : status,
+      ...(priority && { priority }),
+      ...(status && { status }),
     },
     take,
     skip,

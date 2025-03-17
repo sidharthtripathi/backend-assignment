@@ -1,13 +1,17 @@
 import express from 'express'
+import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
-const server = express()
 import { userRouter } from './routes/userRouter'
 import { taskRouter } from './routes/taskRouter'
 import bodyParser from 'body-parser'
+dotenv.config()
+const server = express()
+server.use(cookieParser())
 server.use(bodyParser.json())
 server.use('/api/auth',userRouter)
 server.use("/api/tasks",(req,res,next)=>{
-    const token = req.headers.token as string
+    const token = req.cookies.token
     if(!token) res.status(401).end()
     else{
         try {
