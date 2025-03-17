@@ -3,7 +3,7 @@
   "type": "commonjs",
   "scripts": {
     "build" :"npx tsc",
-    "start": "node build"
+    "start": "npx prisma db push && node build"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
